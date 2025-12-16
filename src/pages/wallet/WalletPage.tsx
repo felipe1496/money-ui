@@ -1,4 +1,4 @@
-import { Suspense, type FC } from 'react';
+import { type FC } from 'react';
 import { Button } from '../../components/commons/Button';
 import { Link } from 'react-router';
 import { ROUTES } from '../../constants/routes';
@@ -14,9 +14,7 @@ export const WalletPage: FC = () => (
         <Link to={ROUTES.WALLET.NEW}>New Transaction</Link>
       </Button>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <WalletList />
-      </Suspense>
+      <WalletList />
     </main>
   </Page>
 );

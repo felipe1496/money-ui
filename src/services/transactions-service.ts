@@ -30,6 +30,8 @@ export const TransactionsService = {
       params: queryOpts,
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
     return response.data;
   },
 };

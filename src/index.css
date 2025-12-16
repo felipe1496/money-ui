@@ -1,11 +1,16 @@
 @import 'tailwindcss';
-:root {
-  --page-height: calc(100vh - 4rem);
-  --color-primary: #927bff;
-  --color-secondary: #00eec8;
-  --color-muted: #27272a;
-  --color-foreground: #fafafa;
-  --color-muted-foreground: #71717a;
+
+@layer base {
+  :root {
+    --page-height: calc(100vh - 4rem);
+    --color-primary: #927bff;
+    --color-secondary: #00eec8;
+    --color-muted: #27272a;
+    --color-foreground: #fafafa;
+    --color-muted-foreground: #71717a;
+    --skeleton: 220 15% 18%;
+    --skeleton-highlight: 220 15% 28%;
+  }
 }
 
 @theme {
@@ -17,6 +22,8 @@
   --color-foreground: var(--color-foreground);
   --color-muted-foreground: var(--color-muted-foreground);
   --spacing-page: var(--page-height);
+  --skeleton: 220 15% 18%;
+  --skeleton-highlight: 220 15% 25%;
 }
 
 body {
@@ -28,4 +35,68 @@ span[data-error]::after {
   margin-left: 5px;
 
   @apply text-red-500;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Skeleton Animations - Pure CSS */
+@layer utilities {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--skeleton)) 0%,
+      hsl(var(--skeleton-highlight)) 50%,
+      hsl(var(--skeleton)) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-pulse {
+    background-color: hsl(var(--skeleton));
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .skeleton-wave {
+    position: relative;
+    overflow: hidden;
+    background-color: hsl(var(--skeleton));
+  }
+
+  .skeleton-wave::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--skeleton-highlight) / 0.6),
+      transparent
+    );
+    animation: skeleton-wave 1.5s infinite;
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes skeleton-wave {
+  100% {
+    transform: translateX(100%);
+  }
 }

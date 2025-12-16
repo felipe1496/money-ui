@@ -61,14 +61,15 @@ export const TablePagination = ({
   return (
     <div
       className={cn(
-        'border-muted-foreground flex items-center justify-between border-t px-4 py-3',
+        'border-muted-foreground flex items-center border-t px-4 py-3',
+        totalItems !== undefined ? 'justify-between' : 'justify-end',
         className,
       )}
     >
       {/* Info text */}
       {totalItems !== undefined && (
         <span className="text-muted-foreground text-sm">
-          Mostrando {startItem}-{endItem} de {totalItems} itens
+          Showing {startItem}-{endItem} of {totalItems} items
         </span>
       )}
 

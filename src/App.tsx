@@ -10,13 +10,19 @@ import { Toaster } from 'sonner';
 import { useEffect } from 'react';
 import { useSessionStore } from './stores/useSessionStore';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 function App() {
   const { sessionIsSettled, startUpSession } = useSessionStore();
 
   useEffect(() => {
-    console.log('executei');
     startUpSession();
   }, [startUpSession]);
 
