@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+:root {
+  --page-height: calc(100vh - 4rem);
+  --color-primary: #927bff;
+  --color-secondary: #00eec8;
+  --color-muted: #27272a;
+  --color-foreground: #fafafa;
+  --color-muted-foreground: #71717a;
+}
+
+@theme {
+  --font-title: 'DM Serif Text', Georgia, 'Times New Roman', serif;
+  --font-text: 'Rubik', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-muted: var(--color-muted);
+  --color-foreground: var(--color-foreground);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --spacing-page: var(--page-height);
+}
+
+body {
+  @apply font-text bg-zinc-800 text-zinc-50;
+}
+
+span[data-error]::after {
+  content: attr(data-error);
+  margin-left: 5px;
+
+  @apply text-red-500;
+}
