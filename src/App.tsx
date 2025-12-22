@@ -1,10 +1,8 @@
 import { Route, Routes } from 'react-router';
 import { LoginPage } from './pages/auth/LoginPage';
 import { ROUTES } from './constants/routes';
-import { HomePage } from './pages/HomePage';
 import { Layout } from './components/Layout';
 import { WalletPage } from './pages/wallet/WalletPage';
-import { NewTransactionPage } from './pages/wallet/NewTransactionPage';
 import {
   MutationCache,
   QueryClient,
