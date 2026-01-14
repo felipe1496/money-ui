@@ -5,7 +5,7 @@ import { Slot } from '@radix-ui/react-slot';
 const variants = {
   primary:
     'bg-primary hover:bg-primary/90 text-shadow-2xs shadow-[inset_0_-2px_0_rgba(0,0,0,0.3)] text-zinc-50',
-  ghost: 'bg-zinc-800 hover:bg-zinc-800/90',
+  ghost: 'ring-inset hover:ring ring-zinc-300 hover:bg-white',
   outlined: 'border border-zinc-300 hover:bg-zinc-50 shadow-sm bg-white',
 };
 

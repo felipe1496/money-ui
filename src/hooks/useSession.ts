@@ -1,5 +1,6 @@
 import { createStore } from '../utils/functions';
 import type { SessionUser } from '../utils/types';
+import { useCollapsed } from './useCollapsed';
 
 interface States {
   sessionUser: SessionUser | null;
@@ -42,5 +43,9 @@ export const useSession = createStore<States & Actions>()((set) => ({
     }
 
     set({ sessionIsSettled: true });
+    const storedCollapsed = localStorage.getItem('NAV_BAR_COLLAPSED');
+    if (storedCollapsed && storedCollapsed === 'true') {
+      useCollapsed.setState({ isCollapsed: true });
+    }
   },
 }));

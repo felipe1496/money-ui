@@ -4,8 +4,11 @@ import { NavBar } from './NavBar';
 import { useSession } from '../hooks/useSession';
 import { ROUTES } from '../constants/routes';
 import { ErrorBoundary } from './commons/ErrorBoundary';
+import { useCollapsed } from '../hooks/useCollapsed';
+import { cn } from '../utils/functions';
 
 export const Layout: FC = () => {
+  const collapsed = useCollapsed((state) => state.isCollapsed);
   const { sessionUser } = useSession();
   const navigate = useNavigate();
 
@@ -20,7 +23,7 @@ export const Layout: FC = () => {
   }
 
   return (
-    <div className="pl-56">
+    <div className={cn('transition-all', collapsed ? 'pl-20' : 'pl-56')}>
       <NavBar />
       <ErrorBoundary
         fallback={
