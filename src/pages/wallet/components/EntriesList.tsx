@@ -63,7 +63,7 @@ export const EntriesList: FC = () => {
     ...getEntriesQueryOpts(dayjs().year(period.year).month(period.month).format('YYYYMM'), {
       per_page: 999,
       order_by: 'reference_date',
-      order: 'asc',
+      order: 'desc',
     }),
     select: (data) => {
       const entriesPerDate: Record<
