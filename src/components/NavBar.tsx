@@ -44,7 +44,7 @@ export const NavBar: FC = () => {
             collapsed ? 'justify-center' : 'justify-between',
           )}
         >
-          {!collapsed && <img src="/logo.webp" alt="Open Wallet Logo" className="w-10" />}
+          {!collapsed && <img src="/logo.webp" alt="Open Wallet Logo" className="w-12" />}
           <Button
             className="size-10 rounded-full"
             size="sm"
@@ -78,7 +78,7 @@ export const NavBar: FC = () => {
             )}
             keepQueryParams
           >
-            <WalletMinimalIcon className="size-5" />
+            <WalletMinimalIcon className="size-5 shrink-0" />
             {!collapsed && 'Wallet'}
           </Zelda>
           <Zelda
@@ -91,7 +91,7 @@ export const NavBar: FC = () => {
             )}
             keepQueryParams
           >
-            <TagsIcon className="size-5" />
+            <TagsIcon className="size-5 shrink-0" />
             {!collapsed && 'Categories'}
           </Zelda>
         </nav>
