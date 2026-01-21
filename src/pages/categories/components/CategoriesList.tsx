@@ -1,51 +1,27 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import {
-  categoriesKeys,
-  getCategoriesPerPeriodQueryOpts,
-  getCategoriesQueryOpts,
-} from '../../../queries/categories-queries';
+import { categoriesKeys, getCategoriesQueryOpts } from '../../../queries/categories-queries';
 import { Card } from '../../../components/commons/Card';
-import dayjs from 'dayjs';
-import { cn } from '../../../utils/functions';
 import { Button } from '../../../components/commons/Button';
 import { SquarePenIcon, TrashIcon } from 'lucide-react';
 import { useDeleteCategory } from '../../../hooks/mutations/useDeleteCategory';
 import { useConfirm } from '../../../hooks/useConfirm';
-import { usePeriod } from '../../../hooks/usePeriod';
 import { SaveCategoryDialog } from './SaveCategoryDialog';
 import { usePatchCategory } from '../../../hooks/mutations/usePatchCategory';
 import { useState, type ComponentProps } from 'react';
 import { entriesKeys } from '../../../queries/transactions-queries';
 
-export const CategoriesPerPeriodList = () => {
+export const CategoriesList = () => {
   const [isEditing, setIsEditing] = useState<{
     id: string;
     defaultValues: NonNullable<ComponentProps<typeof SaveCategoryDialog>['defaultValues']>;
   }>();
   const confirm = useConfirm();
-  const { period } = usePeriod();
-
-  const { data: amountPerPeriodData } = useSuspenseQuery({
-    ...getCategoriesPerPeriodQueryOpts(
-      dayjs().year(period.year).month(period.month).format('YYYYMM'),
-    ),
-  });
 
   const { data: categoriesData } = useSuspenseQuery({
     ...getCategoriesQueryOpts({
       order_by: 'created_at',
       order: 'desc',
     }),
-  });
-
-  const categories = categoriesData.data.categories.map((category) => {
-    const totalAmount =
-      amountPerPeriodData.data.categories.find((c) => c.id === category.id)?.total_amount || 0;
-
-    return {
-      ...category,
-      total_amount: totalAmount,
-    };
   });
 
   const { mutate: deleteCategory } = useDeleteCategory({
@@ -67,11 +43,13 @@ export const CategoriesPerPeriodList = () => {
   return (
     <Card
       className="flex justify-center"
-      header={<h2 className="text-muted-foreground">Categories</h2>}
+      header={
+        <h2 className="text-muted-foreground">Create categories and assign to your transactions</h2>
+      }
     >
       <div className="flex w-full max-w-4xl flex-col gap-2">
-        {categories.length > 0 ? (
-          categories.map((category) => (
+        {categoriesData.data.categories.length > 0 ? (
+          categoriesData.data.categories.map((category) => (
             <div className="flex w-full justify-between" key={`category-${category.id}`}>
               <div className="flex items-center gap-2">
                 <div
@@ -82,16 +60,6 @@ export const CategoriesPerPeriodList = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    'font-medium',
-                    category.total_amount >= 0 ? 'text-green-500' : 'text-red-400',
-                  )}
-                >
-                  {Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-                    category.total_amount,
-                  )}
-                </span>
                 <Button
                   size="sm"
                   variant="outlined"

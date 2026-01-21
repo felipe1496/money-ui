@@ -17,6 +17,7 @@ import { cn } from '../../../utils/functions';
 import { CheckIcon, PlusIcon } from 'lucide-react';
 import { ColorPicker } from '../../../components/commons/ColorPicker';
 import { Button } from '../../../components/commons/Button';
+import { Spinner } from '../../../components/commons/loader/Spinner';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required').max(50, 'Name is too long'),
@@ -118,11 +119,13 @@ export const SaveCategoryDialog: FCC<Props> = ({
 
           <div className="flex w-full gap-2">
             <DialogClose asChild>
-              <Button className="w-full" variant="outlined">
+              <Button className="w-full" variant="outlined" disabled={isLoading}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button className="w-full">{isLoading ? 'Saving...' : 'Save'}</Button>
+            <Button className="w-full" disabled={isLoading}>
+              {isLoading ? <Spinner variant="secondary" /> : 'Save'}
+            </Button>
           </div>
         </Form>
       </DialogContent>
