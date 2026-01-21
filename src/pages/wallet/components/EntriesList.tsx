@@ -319,9 +319,7 @@ export const EntriesList: FC = () => {
                 payload: {
                   name: data.name,
                   note: data.description,
-                  entries: [
-                    { amount: Math.abs(parseUSD(data.amount)) * -1, reference_date: data.date },
-                  ],
+                  entries: [{ amount: parseUSD(data.amount) * -1, reference_date: data.date }],
                   category_id: data.category?.id,
                 },
               },
@@ -350,9 +348,7 @@ export const EntriesList: FC = () => {
                 payload: {
                   name: data.name,
                   note: data.description,
-                  entries: [
-                    { amount: Math.abs(parseUSD(data.amount)) * -1, reference_date: data.date },
-                  ],
+                  entries: [{ amount: parseUSD(data.amount), reference_date: data.date }],
                   category_id: data.category?.id,
                 },
               },
@@ -380,7 +376,7 @@ export const EntriesList: FC = () => {
                 payload: {
                   category_id: data.category?.id,
                   entries: data.entries.map((entry) => ({
-                    amount: Math.abs(parseUSD(entry.amount)) * -1,
+                    amount: parseUSD(entry.amount) * -1,
                     reference_date: entry.reference_date,
                   })),
                   name: data.name,

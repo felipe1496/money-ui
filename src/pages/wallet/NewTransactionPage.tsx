@@ -51,9 +51,7 @@ export const NewTransactionPage: FC = () => {
                 postTransaction(
                   {
                     category_id: data.category?.id,
-                    entries: [
-                      { amount: Math.abs(parseUSD(data.amount)) * -1, reference_date: data.date },
-                    ],
+                    entries: [{ amount: parseUSD(data.amount) * -1, reference_date: data.date }],
                     name: data.name,
                     note: data.description,
                     type: 'simple_expense',
@@ -93,9 +91,7 @@ export const NewTransactionPage: FC = () => {
                 postTransaction(
                   {
                     category_id: data.category?.id,
-                    entries: [
-                      { amount: Math.abs(parseUSD(data.amount)) * -1, reference_date: data.date },
-                    ],
+                    entries: [{ amount: parseUSD(data.amount), reference_date: data.date }],
                     name: data.name,
                     note: data.description,
                     type: 'income',
@@ -133,7 +129,7 @@ export const NewTransactionPage: FC = () => {
                   {
                     category_id: data.category?.id,
                     entries: data.entries.map((entry) => ({
-                      amount: Math.abs(parseUSD(entry.amount)) * -1,
+                      amount: parseUSD(entry.amount) * -1,
                       reference_date: entry.reference_date,
                     })),
                     name: data.name,
