@@ -14,7 +14,6 @@ export const DrawerContent: FC<
     <DialogPrimitive.Content
       className={cn(
         'fixed top-0 left-0 z-50 flex h-screen w-full max-w-64 flex-col rounded-md bg-white shadow-md',
-        // Use as classes geradas pelo seu @theme
         'data-[state=open]:animate-drawer-in',
         'data-[state=closed]:animate-drawer-out',
         className,
