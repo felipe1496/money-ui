@@ -8,13 +8,7 @@ import { useDeleteTransaction } from '../../../hooks/mutations/useDeleteTransact
 import { Card } from '../../../components/commons/Card';
 import { cn, formatCurrency, parseUSD } from '../../../utils/functions';
 import { Button } from '../../../components/commons/Button';
-import {
-  BanknoteArrowDownIcon,
-  BanknoteArrowUpIcon,
-  SquareDivideIcon,
-  SquarePenIcon,
-  TrashIcon,
-} from 'lucide-react';
+import { SquarePenIcon, TrashIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { ROUTES } from '../../../constants/routes';
 import { usePeriod } from '../../../hooks/usePeriod';
@@ -281,30 +275,6 @@ export const EntriesList: FC = () => {
           </>
         );
       },
-      icon() {
-        switch (entry.type) {
-          case 'simple_expense':
-            return (
-              <div className="flex size-10 items-center justify-center rounded-full bg-red-100 text-red-500">
-                <BanknoteArrowDownIcon />
-              </div>
-            );
-          case 'income':
-            return (
-              <div className="flex size-10 items-center justify-center rounded-full bg-green-100 text-green-500">
-                <BanknoteArrowUpIcon />
-              </div>
-            );
-          case 'installment':
-            return (
-              <div className="flex size-10 items-center justify-center rounded-full bg-amber-100 text-amber-500">
-                <SquareDivideIcon className="size-5" />
-              </div>
-            );
-          default:
-            return null;
-        }
-      },
     };
   }
 
@@ -361,14 +331,11 @@ export const EntriesList: FC = () => {
                   return (
                     <div
                       key={entry.id}
-                      className="flex justify-between gap-2 border-b border-zinc-300 px-1 pt-1 pb-2"
+                      className="flex justify-between gap-2 border-b border-zinc-300 px-3 pt-1 pb-2"
                     >
                       <div className="flex min-w-0 flex-1 items-center gap-2">
-                        {data.icon()}
-                        <div className="flex min-w-0 flex-1 items-center gap-2">
-                          {data.category()}
-                          <p className="truncate font-medium">{entry.name}</p>
-                        </div>
+                        {data.category()}
+                        <p className="truncate font-medium">{entry.name}</p>
                       </div>
                       <div className="flex flex-col items-end gap-2 font-medium">
                         <span
