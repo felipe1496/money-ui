@@ -1,8 +1,8 @@
-import { useState, type ComponentProps, type FC } from 'react';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { entriesKeys, getEntriesQueryOpts } from '../../../queries/transactions-queries';
+import { useEffect, useRef, useState, type ComponentProps, type FC } from 'react';
+import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { entriesKeys } from '../../../queries/transactions-queries';
 import dayjs from 'dayjs';
-import type { TransactionsService } from '../../../services/TransactionsService';
+import { TransactionsService } from '../../../services/TransactionsService';
 import { useConfirm } from '../../../hooks/useConfirm';
 import { useDeleteTransaction } from '../../../hooks/mutations/useDeleteTransaction';
 import { Card } from '../../../components/commons/Card';
@@ -18,6 +18,7 @@ import { SaveSimpleExpenseDialog } from './SaveSimpleExpenseDialog';
 import { createFilter } from '../../../utils/filter';
 import { SaveInstallmentDialog } from './SaveInstallmentDialog';
 import { usePatchTransaction } from '../../../hooks/mutations/usePatchTransaction';
+import { Spinner } from '../../../components/commons/loader/Spinner';
 export const EntriesList: FC = () => {
   const [isEditingExpense, setIsEditingExpense] = useState<{
     id: string;
@@ -51,18 +52,32 @@ export const EntriesList: FC = () => {
     },
   });
 
-  const { data } = useSuspenseQuery({
-    ...getEntriesQueryOpts({
-      per_page: 999,
-      order_by: 'reference_date:desc,created_at:desc',
-      filter: createFilter().and('period', 'eq', periodFormatted).toURL(),
-    }),
+  const {
+    data: entriesData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSuspenseInfiniteQuery({
+    queryKey: [...entriesKeys.all(), periodFormatted],
+    queryFn: ({ pageParam = 1 }) =>
+      TransactionsService.getEntries({
+        per_page: 25,
+        page: pageParam,
+        filter: createFilter().and('period', 'eq', periodFormatted).toURL(),
+        order_by: 'reference_date:desc,created_at:desc',
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      return lastPage.query.next_page ? lastPage.query.page + 1 : undefined;
+    },
     select: (data) => {
+      const entries = data.pages.flatMap((page) => page.data.entries);
+
       const entriesPerDate: Record<
         string,
         Awaited<ReturnType<typeof TransactionsService.getEntries>>['data']['entries'][number][]
       > = {};
-      data.data.entries.forEach((entry) => {
+      entries.forEach((entry) => {
         const date = entry.reference_date.slice(0, 10);
         if (!entriesPerDate[date]) {
           entriesPerDate[date] = [entry];
@@ -70,9 +85,29 @@ export const EntriesList: FC = () => {
           entriesPerDate[date] = [...entriesPerDate[date], entry];
         }
       });
+
       return entriesPerDate;
     },
   });
+
+  const sentinel = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0, rootMargin: '100px' },
+    );
+
+    if (sentinel.current) {
+      observer.observe(sentinel.current);
+    }
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const { mutate: deleteTransaction } = useDeleteTransaction({
     onMutate: async (id) => {
@@ -124,7 +159,7 @@ export const EntriesList: FC = () => {
     },
   });
 
-  const entries = Object.entries(data);
+  const entries = Object.entries(entriesData);
 
   function getEntryData(
     entry: Awaited<ReturnType<typeof TransactionsService.getEntries>>['data']['entries'][number],
@@ -279,197 +314,203 @@ export const EntriesList: FC = () => {
   }
 
   return (
-    <Card className="p-0" header={<h2 className="text-muted-foreground">Transactions</h2>}>
-      {entries.length > 0 ? (
-        <>
-          <table className="hidden w-full md:table">
-            <tbody>
-              {entries
-                .map(([date, entries]) => [
-                  <tr key={date} className="bg-zinc-100">
-                    <td className="px-3 py-1 text-sm text-zinc-500" colSpan={5}>
-                      {dayjs(date, 'YYYY-MM-DD').format('DD of MMMM')}
-                    </td>
-                  </tr>,
-                  ...entries.map((entry) => {
+    <div className="flex flex-col items-center gap-4">
+      <Card className="p-0" header={<h2 className="text-muted-foreground">Transactions</h2>}>
+        {entries.length > 0 ? (
+          <>
+            <table className="hidden w-full md:table">
+              <tbody>
+                {entries
+                  .map(([date, entries]) => [
+                    <tr key={date} className="bg-zinc-100">
+                      <td className="px-3 py-1 text-sm text-zinc-500" colSpan={5}>
+                        {dayjs(date, 'YYYY-MM-DD').format('DD of MMMM')}
+                      </td>
+                    </tr>,
+                    ...entries.map((entry) => {
+                      const data = getEntryData(entry);
+                      return (
+                        <tr key={entry.id}>
+                          <td className="w-[70%] px-3 py-1">
+                            <div className="flex items-center gap-2">
+                              {data.category()}
+                              <p>{entry.name}</p>
+                            </div>
+                          </td>
+                          <td className="w-[1%] px-3 py-1">{data.installment()}</td>
+                          <td
+                            className={cn(
+                              'w-[10%] px-3 py-1 text-right font-medium',
+                              entry.amount < 0 ? 'text-red-400' : 'text-green-500',
+                            )}
+                          >
+                            <span className="whitespace-nowrap">{data.amount()}</span>
+                          </td>
+                          <td className="w-[4%] px-3 py-1 text-right">
+                            <div className="flex items-center gap-2">{data.actions()}</div>
+                          </td>
+                        </tr>
+                      );
+                    }),
+                  ])
+                  .flat(Infinity)}
+              </tbody>
+            </table>
+            <div className="flex flex-col md:hidden">
+              {entries.map(([date, entries]) => (
+                <div key={date}>
+                  <h3 className="px-3 py-1 font-medium">
+                    {dayjs(date, 'YYYY-MM-DD').format('DD of MMMM')}
+                  </h3>
+                  {entries.map((entry) => {
                     const data = getEntryData(entry);
                     return (
-                      <tr key={entry.id}>
-                        <td className="w-[70%] px-3 py-1">
-                          <div className="flex items-center gap-2">
-                            {data.category()}
-                            <p>{entry.name}</p>
-                          </div>
-                        </td>
-                        <td className="w-[1%] px-3 py-1">{data.installment()}</td>
-                        <td
-                          className={cn(
-                            'w-[10%] px-3 py-1 text-right font-medium',
-                            entry.amount < 0 ? 'text-red-400' : 'text-green-500',
-                          )}
-                        >
-                          <span className="whitespace-nowrap">{data.amount()}</span>
-                        </td>
-                        <td className="w-[4%] px-3 py-1 text-right">
-                          <div className="flex items-center gap-2">{data.actions()}</div>
-                        </td>
-                      </tr>
+                      <div
+                        key={entry.id}
+                        className="flex justify-between gap-2 border-b border-zinc-300 px-3 pt-1 pb-2"
+                      >
+                        <div className="flex min-w-0 flex-1 items-center gap-2">
+                          {data.category()}
+                          <p className="truncate font-medium">{entry.name}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2 font-medium">
+                          <span
+                            className={cn(
+                              'whitespace-nowrap',
+                              entry.amount < 0 ? 'text-red-400' : 'text-green-500',
+                            )}
+                          >
+                            {data.amount()}
+                          </span>
+                          <div className="flex items-center gap-1">{data.actions()}</div>
+                        </div>
+                      </div>
                     );
-                  }),
-                ])
-                .flat(Infinity)}
-            </tbody>
-          </table>
-          <div className="flex flex-col md:hidden">
-            {entries.map(([date, entries]) => (
-              <div key={date}>
-                <h3 className="px-3 py-1 font-medium">
-                  {dayjs(date, 'YYYY-MM-DD').format('DD of MMMM')}
-                </h3>
-                {entries.map((entry) => {
-                  const data = getEntryData(entry);
-                  return (
-                    <div
-                      key={entry.id}
-                      className="flex justify-between gap-2 border-b border-zinc-300 px-3 pt-1 pb-2"
-                    >
-                      <div className="flex min-w-0 flex-1 items-center gap-2">
-                        {data.category()}
-                        <p className="truncate font-medium">{entry.name}</p>
-                      </div>
-                      <div className="flex flex-col items-end gap-2 font-medium">
-                        <span
-                          className={cn(
-                            'whitespace-nowrap',
-                            entry.amount < 0 ? 'text-red-400' : 'text-green-500',
-                          )}
-                        >
-                          {data.amount()}
-                        </span>
-                        <div className="flex items-center gap-1">{data.actions()}</div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
+                  })}
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center pb-8">
+            <img src="/empty_state_wallet.webp" alt="no results found" className="size-28" />
+
+            <span className="text-lg font-medium">No transactions yet</span>
+            <span>Try adding one</span>
+
+            <Button className="mt-3" variant="outlined" asChild>
+              <Link to={{ pathname: ROUTES.WALLET.NEW_TRANSACTION }}>Add Transaction</Link>
+            </Button>
           </div>
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center pb-8">
-          <img src="/empty_state_wallet.webp" alt="no results found" className="size-28" />
+        )}
+        {isEditingExpense && (
+          <SaveSimpleExpenseDialog
+            isLoading={
+              isPatchTransactionLoading &&
+              isEditingExpense.id === patchTransactionVariables.transactionId
+            }
+            isVisible={!!isEditingExpense}
+            onClose={() => setIsEditingExpense(null)}
+            defaultValues={isEditingExpense?.defaultValues}
+            onSave={(data) => {
+              patchTransaction(
+                {
+                  transactionId: isEditingExpense.id,
+                  payload: {
+                    name: data.name,
+                    note: data.description,
+                    entries: [{ amount: parseUSD(data.amount) * -1, reference_date: data.date }],
+                    category_id: data.category?.id,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    setIsEditingExpense(null);
+                  },
+                },
+              );
+            }}
+          />
+        )}
+        {isEditingIncome && (
+          <SaveIncomeDialog
+            isLoading={
+              isPatchTransactionLoading &&
+              isEditingIncome.id === patchTransactionVariables.transactionId
+            }
+            isVisible={!!isEditingIncome}
+            onClose={() => setIsEditingIncome(null)}
+            defaultValues={isEditingIncome?.defaultValues}
+            onSave={(data) => {
+              patchTransaction(
+                {
+                  transactionId: isEditingIncome.id,
+                  payload: {
+                    name: data.name,
+                    note: data.description,
+                    entries: [{ amount: parseUSD(data.amount), reference_date: data.date }],
+                    category_id: data.category?.id,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    setIsEditingIncome(null);
+                  },
+                },
+              );
+            }}
+          />
+        )}
+        {isEditingInstallment && (
+          <SaveInstallmentDialog
+            isLoading={
+              isPatchTransactionLoading &&
+              isEditingInstallment.transaction_id === patchTransactionVariables.transactionId
+            }
+            isVisible={!!isEditingInstallment}
+            onClose={() => setIsEditingInstallment(null)}
+            onSave={(data) => {
+              patchTransaction(
+                {
+                  transactionId: isEditingInstallment.transaction_id,
+                  payload: {
+                    category_id: data.category?.id,
+                    entries: data.entries.map((entry) => ({
+                      amount: parseUSD(entry.amount) * -1,
+                      reference_date: entry.reference_date,
+                    })),
+                    name: data.name,
+                    note: data.note,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    setIsEditingInstallment(null);
+                  },
+                },
+              );
+            }}
+            defaultValues={(() => {
+              if (!isEditingInstallment?.defaultValues) return undefined;
+              return {
+                amount: isEditingInstallment.defaultValues.amount,
+                name: isEditingInstallment.defaultValues.name,
+                note: isEditingInstallment.defaultValues.note,
+                installments: isEditingInstallment.defaultValues.installments,
+                reference_date: isEditingInstallment.defaultValues.reference_date,
+                category: isEditingInstallment.defaultValues.category,
+              };
+            })()}
+            previewDefaultValues={{
+              entries: [],
+            }}
+          />
+        )}
 
-          <span className="text-lg font-medium">No transactions yet</span>
-          <span>Try adding one</span>
+        <div ref={sentinel} style={{ height: '20px' }} />
+      </Card>
 
-          <Button className="mt-3" variant="outlined" asChild>
-            <Link to={{ pathname: ROUTES.WALLET.NEW_TRANSACTION }}>Add Transaction</Link>
-          </Button>
-        </div>
-      )}
-      {isEditingExpense && (
-        <SaveSimpleExpenseDialog
-          isLoading={
-            isPatchTransactionLoading &&
-            isEditingExpense.id === patchTransactionVariables.transactionId
-          }
-          isVisible={!!isEditingExpense}
-          onClose={() => setIsEditingExpense(null)}
-          defaultValues={isEditingExpense?.defaultValues}
-          onSave={(data) => {
-            patchTransaction(
-              {
-                transactionId: isEditingExpense.id,
-                payload: {
-                  name: data.name,
-                  note: data.description,
-                  entries: [{ amount: parseUSD(data.amount) * -1, reference_date: data.date }],
-                  category_id: data.category?.id,
-                },
-              },
-              {
-                onSuccess: () => {
-                  setIsEditingExpense(null);
-                },
-              },
-            );
-          }}
-        />
-      )}
-      {isEditingIncome && (
-        <SaveIncomeDialog
-          isLoading={
-            isPatchTransactionLoading &&
-            isEditingIncome.id === patchTransactionVariables.transactionId
-          }
-          isVisible={!!isEditingIncome}
-          onClose={() => setIsEditingIncome(null)}
-          defaultValues={isEditingIncome?.defaultValues}
-          onSave={(data) => {
-            patchTransaction(
-              {
-                transactionId: isEditingIncome.id,
-                payload: {
-                  name: data.name,
-                  note: data.description,
-                  entries: [{ amount: parseUSD(data.amount), reference_date: data.date }],
-                  category_id: data.category?.id,
-                },
-              },
-              {
-                onSuccess: () => {
-                  setIsEditingIncome(null);
-                },
-              },
-            );
-          }}
-        />
-      )}
-      {isEditingInstallment && (
-        <SaveInstallmentDialog
-          isLoading={
-            isPatchTransactionLoading &&
-            isEditingInstallment.transaction_id === patchTransactionVariables.transactionId
-          }
-          isVisible={!!isEditingInstallment}
-          onClose={() => setIsEditingInstallment(null)}
-          onSave={(data) => {
-            patchTransaction(
-              {
-                transactionId: isEditingInstallment.transaction_id,
-                payload: {
-                  category_id: data.category?.id,
-                  entries: data.entries.map((entry) => ({
-                    amount: parseUSD(entry.amount) * -1,
-                    reference_date: entry.reference_date,
-                  })),
-                  name: data.name,
-                  note: data.note,
-                },
-              },
-              {
-                onSuccess: () => {
-                  setIsEditingInstallment(null);
-                },
-              },
-            );
-          }}
-          defaultValues={(() => {
-            if (!isEditingInstallment?.defaultValues) return undefined;
-            return {
-              amount: isEditingInstallment.defaultValues.amount,
-              name: isEditingInstallment.defaultValues.name,
-              note: isEditingInstallment.defaultValues.note,
-              installments: isEditingInstallment.defaultValues.installments,
-              reference_date: isEditingInstallment.defaultValues.reference_date,
-              category: isEditingInstallment.defaultValues.category,
-            };
-          })()}
-          previewDefaultValues={{
-            entries: [],
-          }}
-        />
-      )}
-    </Card>
+      {isFetchingNextPage && <Spinner className="size-8" />}
+    </div>
   );
 };
