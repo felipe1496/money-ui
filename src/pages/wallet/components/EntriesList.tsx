@@ -329,11 +329,19 @@ export const EntriesList: FC = () => {
                         {dayjs(date, 'YYYY-MM-DD').format('DD of MMMM')}
                       </td>
                     </tr>,
-                    ...entries.map((entry) => {
+                    ...entries.map((entry, idx) => {
                       const data = getEntryData(entry);
+                      const padding = 
+                        idx === entries.length - 1?
+                        "px-3 py-1":
+                        "px-3 pt-1";
                       return (
                         <tr key={entry.id}>
-                          <td className="w-[70%] px-3 py-1">
+                          <td 
+                            className={cn(
+                              "w-[70%]", padding
+                            )}
+                          >
                             <div className="flex items-center gap-2">
                               {data.category()}
                               <p>
@@ -343,13 +351,18 @@ export const EntriesList: FC = () => {
                           </td>
                           <td
                             className={cn(
-                              'w-[10%] px-3 py-1 text-right font-medium',
+                              "w-[10%] text-right font-medium",
                               entry.amount < 0 ? 'text-red-400' : 'text-green-500',
+                              padding
                             )}
                           >
                             <span className="whitespace-nowrap">{data.amount()}</span>
                           </td>
-                          <td className="w-[4%] px-3 py-1 text-right">
+                          <td
+                            className={cn(
+                              "w-[4%] text-right", padding
+                            )}
+                          >
                             <div className="flex items-center gap-2">{data.actions()}</div>
                           </td>
                         </tr>
@@ -510,7 +523,7 @@ export const EntriesList: FC = () => {
           />
         )}
 
-        <div ref={sentinel} style={{ height: '20px' }} />
+        <div ref={sentinel} />
       </Card>
 
       {isFetchingNextPage && <Spinner className="size-8" />}
