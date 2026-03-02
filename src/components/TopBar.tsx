@@ -23,7 +23,7 @@ export const TopBar: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 flex h-14 w-screen items-center justify-between border-b border-zinc-300 bg-white px-1 shadow-sm md:hidden">
+    <header className="fixed top-0 flex h-14 w-screen items-center justify-between border-b border-zinc-300 bg-white px-1 shadow-sm md:hidden z-10">
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerTrigger asChild>
           <Button className="size-10 rounded-full" size="sm" variant="ghost">
