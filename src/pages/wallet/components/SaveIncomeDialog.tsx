@@ -19,6 +19,10 @@ import { formatCurrency } from '../../../utils/functions';
 import { Form } from '../../../components/commons/Form';
 import { AsyncSelectCategory } from '../../../components/AsyncSelectCategory';
 import { Spinner } from '../../../components/commons/loader/Spinner';
+import { useState } from 'react';
+import { categoriesKeys } from '../../../queries/categories-queries';
+import { SaveCategoryDialog } from '../../categories/components/SaveCategoryDialog';
+import { usePostCategory } from '../../../hooks/mutations/usePostCategory';
 
 interface Props {
   defaultValues?: Form;
@@ -69,6 +73,17 @@ export const SaveIncomeDialog: FCC<Props> = ({
     onSave(data, { reset });
   };
 
+  const [addCategoryVisible, setAddCategoryVisible] = useState(false);
+  
+  const { mutate: postCategory, isPending } = usePostCategory({
+      onSuccess: () => setAddCategoryVisible(false),
+      meta: {
+        successNotification: 'Category created successfully',
+        errorNotification: 'There was an error creating the category',
+        invalidateQuery: [categoriesKeys.all()],
+      },
+  });
+
   return (
     <Dialog open={isVisible} onOpenChange={onClose}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -90,9 +105,29 @@ export const SaveIncomeDialog: FCC<Props> = ({
             <Controller
               control={control}
               name="category"
-              render={({ field: { onChange, value } }) => (
-                <AsyncSelectCategory onChange={onChange} selected={value} />
-              )}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <>
+                    <AsyncSelectCategory 
+                      selected={value}
+                      onChange={(option) => {
+                        if (option?.id === '__add__') {
+                          setAddCategoryVisible(true);
+                          console.log('Add new category');
+                        } else {
+                          onChange(option);
+                        }
+                      }} 
+                    />
+                    <SaveCategoryDialog
+                      isVisible={addCategoryVisible}
+                      onVisibleChange={setAddCategoryVisible}
+                      onSave={postCategory}
+                      isLoading={isPending}
+                    />
+                  </>
+                )
+              }}
             />
           </label>
           <label className="flex flex-col text-sm">

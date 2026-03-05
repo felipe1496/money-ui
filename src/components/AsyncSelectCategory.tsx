@@ -33,12 +33,21 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange }) =>
       })),
   });
 
+  const addOption: Option<any> = {
+    id: '__add__',
+    value: null,
+    label: '+ Add new category',
+  };
+
+  const options: Option<any>[] = data ? [...data, addOption] : [addOption];
+
   return (
     <AsyncSelect
-      options={data ?? []}
+      options={options}
       isLoading={isFetching}
       search={search}
       selected={selected}
+      // always forward the selected option, parent can inspect the id
       onSelectedChange={onChange}
       onSearchChange={setSearch}
       placeholder="Select a category..."
