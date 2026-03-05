@@ -7,6 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "format": "prettier --write .",
+    "check:format": "prettier --check .",
+    "check:types": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "check:all": "npm run lint && npm run check:format && npm run check:types",
     "preview": "vite preview"
   },
   "dependencies": {
