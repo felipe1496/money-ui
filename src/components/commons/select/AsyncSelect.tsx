@@ -131,7 +131,7 @@ export function AsyncSelect<T>({
                     {option.label}
                   </CommandItem>
                 ))}
-                {onCreate && !isLoading && search && options.length === 0 && (
+                {onCreate && search && options.length === 0 && (
                   <CommandItem
                     onSelect={() => {
                       onCreate(search || '');

@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react';
 import { AsyncSelect, type Option } from './commons/select/AsyncSelect';
 import { useQuery } from '@tanstack/react-query';
-import { getCategoriesQueryOpts } from '../queries/categories-queries';
+import { categoriesKeys, getCategoriesQueryOpts } from '../queries/categories-queries';
 import type { CategoriesService } from '../services/CategoriesService';
 import { useDebounce } from '../hooks/useDebounce';
 import { SaveCategoryDialog } from '../pages/categories/components/SaveCategoryDialog';
@@ -37,7 +37,13 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange, isCr
       })),
   });
 
-  const { mutateAsync: createCategory } = usePostCategory();
+  const { mutateAsync: postCategory, isPending } = usePostCategory({
+    meta: {
+      successNotification: 'Category created successfully',
+      errorNotification: 'There was an error creating the category',
+      invalidateQuery: [categoriesKeys.all()],
+    },
+  });
 
   return (
     <>
@@ -56,11 +62,13 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange, isCr
       {isCreatable && isCreating && (
         <SaveCategoryDialog
           isVisible={!!isCreating}
-          onSave={(data) => {
-            createCategory(data);
+          onSave={async (data) => {
+            await postCategory(data);
+            setIsCreating('');
           }}
           onVisibleChange={() => setIsCreating('')}
           defaultValues={{ name: isCreating, color: '' }}
+          isLoading={isPending}
         />
       )}
     </>
