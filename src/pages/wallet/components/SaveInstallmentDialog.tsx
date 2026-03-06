@@ -189,7 +189,7 @@ export const SaveInstallmentDialog: FCC<Props> = ({
                   control={control}
                   name="category"
                   render={({ field: { onChange, value } }) => (
-                    <AsyncSelectCategory onChange={onChange} selected={value} />
+                    <AsyncSelectCategory onChange={onChange} selected={value} isCreatable />
                   )}
                 />
               </label>

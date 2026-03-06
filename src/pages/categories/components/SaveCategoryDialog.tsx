@@ -70,7 +70,12 @@ export const SaveCategoryDialog: FCC<Props> = ({
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
         </DialogHeader>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form
+          onSubmit={(evt) => {
+            evt.stopPropagation();
+            handleSubmit(onSubmit)(evt);
+          }}
+        >
           <label className="flex flex-col text-sm">
             <span data-error={errors.name?.message}>Name</span>
             <Input placeholder="Name" {...register('name')} />
