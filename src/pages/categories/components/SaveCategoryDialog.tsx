@@ -86,6 +86,7 @@ export const SaveCategoryDialog: FCC<Props> = ({
                   <div className="mt-2 flex items-center gap-1">
                     {Object.values(DEFAULT_COLORS).map((color) => (
                       <button
+                        key={color}
                         type="button"
                         onClick={() => onChange(color)}
                         className="flex size-6 cursor-pointer items-center justify-center rounded-full"
