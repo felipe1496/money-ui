@@ -1,4 +1,4 @@
-import { Check, ChevronsUpDown, LoaderCircleIcon, Search, XIcon } from 'lucide-react';
+import { Check, ChevronsUpDown, LoaderCircleIcon, Plus, Search, XIcon } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -30,6 +30,7 @@ interface Props<T> {
   isLoading?: boolean;
   onSearchChange?: (value: string) => void;
   search?: string;
+  onCreate?: (value: string) => void;
 }
 
 export function AsyncSelect<T>({
@@ -44,6 +45,7 @@ export function AsyncSelect<T>({
   isLoading = false,
   onSearchChange = () => {},
   search,
+  onCreate = () => {},
 }: Props<T>) {
   const [open, setOpen] = useState(false);
 
@@ -129,6 +131,18 @@ export function AsyncSelect<T>({
                     {option.label}
                   </CommandItem>
                 ))}
+                {onCreate && search && options.length === 0 && (
+                  <CommandItem
+                    onSelect={() => {
+                      onCreate(search || '');
+                      setOpen(false);
+                    }}
+                    className="flex cursor-pointer items-center rounded px-2 py-1 data-[selected=true]:bg-gray-100"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create "{search}"
+                  </CommandItem>
+                )}
               </CommandGroup>
             </CommandList>
           )}

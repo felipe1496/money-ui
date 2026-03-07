@@ -1,9 +1,11 @@
 import { useState, type FC } from 'react';
 import { AsyncSelect, type Option } from './commons/select/AsyncSelect';
 import { useQuery } from '@tanstack/react-query';
-import { getCategoriesQueryOpts } from '../queries/categories-queries';
+import { categoriesKeys, getCategoriesQueryOpts } from '../queries/categories-queries';
 import type { CategoriesService } from '../services/CategoriesService';
 import { useDebounce } from '../hooks/useDebounce';
+import { SaveCategoryDialog } from '../pages/categories/components/SaveCategoryDialog';
+import { usePostCategory } from '../hooks/mutations/usePostCategory';
 
 interface Props {
   selected?: Option<
@@ -14,10 +16,16 @@ interface Props {
       Awaited<ReturnType<typeof CategoriesService.getCategories>>['data']['categories'][number]
     > | null,
   ) => void;
+  isCreatable?: boolean;
 }
 
-export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange }) => {
+export const AsyncSelectCategory: FC<Props> = ({
+  selected = null,
+  onChange = () => {},
+  isCreatable,
+}) => {
   const [search, setSearch] = useState<string>('');
+  const [isCreating, setIsCreating] = useState('');
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -33,15 +41,51 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange }) =>
       })),
   });
 
+  const { mutateAsync: postCategory, isPending } = usePostCategory({
+    meta: {
+      successNotification: 'Category created successfully',
+      errorNotification: 'There was an error creating the category',
+      invalidateQuery: [categoriesKeys.all()],
+    },
+    onSuccess: (result) => {
+      const category = result.data.category;
+      const option = {
+        id: category.id,
+        value: category,
+        label: category.name,
+      };
+
+      onChange(option);
+
+      setIsCreating('');
+    },
+  });
+
   return (
-    <AsyncSelect
-      options={data ?? []}
-      isLoading={isFetching}
-      search={search}
-      selected={selected}
-      onSelectedChange={onChange}
-      onSearchChange={setSearch}
-      placeholder="Select a category..."
-    />
+    <>
+      <AsyncSelect
+        options={data ?? []}
+        isLoading={isFetching}
+        search={search}
+        selected={selected}
+        onSelectedChange={onChange}
+        onSearchChange={setSearch}
+        placeholder="Select a category..."
+        onCreate={(value) => {
+          setIsCreating(value);
+        }}
+      />
+      {isCreatable && isCreating && (
+        <SaveCategoryDialog
+          isVisible={!!isCreating}
+          onSave={(categoryData) => {
+            postCategory(categoryData);
+          }}
+          onVisibleChange={() => setIsCreating('')}
+          defaultValues={{ name: isCreating, color: '' }}
+          isLoading={isPending}
+        />
+      )}
+    </>
   );
 };
