@@ -19,7 +19,11 @@ interface Props {
   isCreatable?: boolean;
 }
 
-export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange, isCreatable }) => {
+export const AsyncSelectCategory: FC<Props> = ({
+  selected = null,
+  onChange = () => {},
+  isCreatable,
+}) => {
   const [search, setSearch] = useState<string>('');
   const [isCreating, setIsCreating] = useState('');
 
@@ -43,6 +47,18 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange, isCr
       errorNotification: 'There was an error creating the category',
       invalidateQuery: [categoriesKeys.all()],
     },
+    onSuccess: (result) => {
+      const category = result.data.category;
+      const option = {
+        id: category.id,
+        value: category,
+        label: category.name,
+      };
+
+      onChange(option);
+
+      setIsCreating('');
+    },
   });
 
   return (
@@ -62,9 +78,8 @@ export const AsyncSelectCategory: FC<Props> = ({ selected = null, onChange, isCr
       {isCreatable && isCreating && (
         <SaveCategoryDialog
           isVisible={!!isCreating}
-          onSave={async (data) => {
-            await postCategory(data);
-            setIsCreating('');
+          onSave={(categoryData) => {
+            postCategory(categoryData);
           }}
           onVisibleChange={() => setIsCreating('')}
           defaultValues={{ name: isCreating, color: '' }}
