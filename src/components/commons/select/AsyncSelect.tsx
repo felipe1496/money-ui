@@ -150,7 +150,7 @@ export function AsyncSelect<T>({
                     {option.label}
                   </CommandItem>
                 ))}
-                {onCreate && search && options.length === 0 && (
+                {onCreate && options.length === 0 && (
                   <CommandItem
                     onSelect={() => {
                       onCreate(search || '');
@@ -159,7 +159,7 @@ export function AsyncSelect<T>({
                     className="flex cursor-pointer items-center rounded px-2 py-1 data-[selected=true]:bg-gray-100"
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Create "{search}"
+                    Create {search ? `"${search}"` : 'new category'}
                   </CommandItem>
                 )}
               </CommandGroup>
