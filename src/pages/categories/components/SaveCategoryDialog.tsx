@@ -65,7 +65,7 @@ export const SaveCategoryDialog: FCC<Props> = ({
 
   return (
     <Dialog open={isVisible} onOpenChange={onVisibleChange}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
