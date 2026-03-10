@@ -52,6 +52,7 @@ export const NavBar: FC = () => {
         <nav className="flex w-full flex-col gap-1 border-red-500">
           {MENU.ITEMS.map((item) => (
             <Zelda
+              key={item.label}
               to={item.route}
               className={cn(
                 'flex h-12 items-center gap-3 rounded transition-colors hover:bg-zinc-200',
