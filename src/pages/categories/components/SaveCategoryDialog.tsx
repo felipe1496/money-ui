@@ -84,8 +84,9 @@ export const SaveCategoryDialog: FCC<Props> = ({
                 const isCustomColor = value && !Object.values(DEFAULT_COLORS).includes(value);
                 return (
                   <div className="mt-2 flex items-center gap-1">
-                    {Object.values(DEFAULT_COLORS).map((color) => (
+                    {Object.values(DEFAULT_COLORS).map((color, idx) => (
                       <button
+                        key={`${color}-${idx}`}
                         type="button"
                         onClick={() => onChange(color)}
                         className="flex size-6 cursor-pointer items-center justify-center rounded-full"
