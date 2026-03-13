@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './Popover';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 import { useState, type FC } from 'react';
-import { MONTHS } from '../../constants/dates';
+import { MONTHS } from '@/constants/dates';
 
 interface PeriodPickerCustomProps {
   value?: { month: number; year: number };

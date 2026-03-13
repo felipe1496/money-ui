@@ -1,14 +1,14 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { categoriesKeys, getCategoriesQueryOpts } from '../../../queries/categories-queries';
-import { Card } from '../../../components/commons/Card';
-import { Button } from '../../../components/commons/Button';
+import { categoriesKeys, getCategoriesQueryOpts } from '@/queries/categories-queries';
+import { Card } from '@/components/commons/Card';
+import { Button } from '@/components/commons/Button';
 import { SquarePenIcon, TrashIcon } from 'lucide-react';
-import { useDeleteCategory } from '../../../hooks/mutations/useDeleteCategory';
-import { useConfirm } from '../../../hooks/useConfirm';
+import { useDeleteCategory } from '@/hooks/mutations/useDeleteCategory';
+import { useConfirm } from '@/hooks/useConfirm';
 import { SaveCategoryDialog } from './SaveCategoryDialog';
-import { usePatchCategory } from '../../../hooks/mutations/usePatchCategory';
+import { usePatchCategory } from '@/hooks/mutations/usePatchCategory';
 import { useState, type ComponentProps } from 'react';
-import { entriesKeys } from '../../../queries/transactions-queries';
+import { entriesKeys } from '@/queries/transactions-queries';
 
 export const CategoriesList = () => {
   const [isEditing, setIsEditing] = useState<{

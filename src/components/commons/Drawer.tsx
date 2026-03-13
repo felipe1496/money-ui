@@ -1,7 +1,7 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 import type { ComponentProps, FC, HTMLAttributes } from 'react';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 
 export const Drawer = DialogPrimitive.Root;
 export const DrawerTrigger = DialogPrimitive.Trigger;

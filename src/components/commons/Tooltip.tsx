@@ -1,6 +1,6 @@
 import * as PrimitiveTooltip from '@radix-ui/react-tooltip';
 import type { ComponentProps, FC } from 'react';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 
 export const Tooltip = PrimitiveTooltip.Root;
 export const TooltipTrigger = PrimitiveTooltip.Trigger;

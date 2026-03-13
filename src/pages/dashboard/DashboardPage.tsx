@@ -1,11 +1,11 @@
 import { Suspense, type FC } from 'react';
-import { Page } from '../../components/commons/Page';
+import { Page } from '@/components/commons/Page';
 import { Insights } from './components/Insights';
-import { PeriodPickerCustom } from '../../components/commons/PeriodPickerCustom';
-import { Button } from '../../components/commons/Button';
-import { MONTHS_FULL } from '../../constants/dates';
-import { usePeriod } from '../../hooks/usePeriod';
-import { LoaderWords } from '../../components/commons/loader/LoaderWords';
+import { PeriodPickerCustom } from '@/components/commons/PeriodPickerCustom';
+import { Button } from '@/components/commons/Button';
+import { MONTHS_FULL } from '@/constants/dates';
+import { usePeriod } from '@/hooks/usePeriod';
+import { LoaderWords } from '@/components/commons/loader/LoaderWords';
 
 export const DashboardPage: FC = () => {
   const { period, setPeriod } = usePeriod();

@@ -1,6 +1,6 @@
 import { useRef, type ButtonHTMLAttributes, type ChangeEvent, type MouseEvent } from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import type { FCC } from '../../utils/types';
+import type { FCC } from '@/utils/types';
 
 interface AsChild {
   asChild: true;

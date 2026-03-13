@@ -1,5 +1,5 @@
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { Button } from '../../../components/commons/Button';
+import { Button } from '@/components/commons/Button';
 import {
   Dialog,
   DialogClose,
@@ -7,22 +7,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/commons/Dialog';
-import { Input } from '../../../components/commons/input/Input';
-import { Textarea } from '../../../components/commons/Textarea';
-import type { FCC } from '../../../utils/types';
+} from '@/components/commons/Dialog';
+import { Input } from '@/components/commons/input/Input';
+import { Textarea } from '@/components/commons/Textarea';
+import type { FCC } from '@/utils/types';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MoneyInput } from '../../../components/commons/input/MoneyInput';
-import { NumberInput } from '../../../components/commons/input/NumberInput';
-import { formatCurrency, parseUSD } from '../../../utils/functions';
+import { MoneyInput } from '@/components/commons/input/MoneyInput';
+import { NumberInput } from '@/components/commons/input/NumberInput';
+import { formatCurrency, parseUSD } from '@/utils/functions';
 import dayjs from 'dayjs';
-import { AsyncSelectCategory } from '../../../components/AsyncSelectCategory';
-import type { CategoriesService } from '../../../services/CategoriesService';
-import type { Option } from '../../../components/commons/select/AsyncSelect';
-import { Form } from '../../../components/commons/Form';
+import { AsyncSelectCategory } from '@/components/AsyncSelectCategory';
+import type { CategoriesService } from '@/services/CategoriesService';
+import type { Option } from '@/components/commons/select/AsyncSelect';
+import { Form } from '@/components/commons/Form';
 import { useState } from 'react';
-import { Spinner } from '../../../components/commons/loader/Spinner';
+import { Spinner } from '@/components/commons/loader/Spinner';
 
 interface Props {
   defaultValues?: Form;

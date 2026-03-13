@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import type { MutationOpts, SessionUser } from '../../utils/types';
-import { client } from '../../services/client';
+import type { MutationOpts, SessionUser } from '@/utils/types';
+import { client } from '@/services/client';
 
 export function usePostLoginGoogle({
   mutationKey = [],

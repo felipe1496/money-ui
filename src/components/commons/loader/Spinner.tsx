@@ -1,5 +1,5 @@
 import type { FC, HTMLAttributes } from 'react';
-import { cn } from '../../../utils/functions';
+import { cn } from '@/utils/functions';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   variant?: 'primary' | 'secondary';

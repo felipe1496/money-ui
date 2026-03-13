@@ -1,15 +1,15 @@
 import { useState, type FC } from 'react';
-import { Page } from '../../components/commons/Page';
+import { Page } from '@/components/commons/Page';
 import { useNavigate } from 'react-router';
-import { ROUTES } from '../../constants/routes';
-import { entriesKeys } from '../../queries/transactions-queries';
-import { Card } from '../../components/commons/Card';
+import { ROUTES } from '@/constants/routes';
+import { entriesKeys } from '@/queries/transactions-queries';
+import { Card } from '@/components/commons/Card';
 import { BanknoteArrowDownIcon, BanknoteArrowUpIcon, SquareDivideIcon } from 'lucide-react';
-import { parseUSD } from '../../utils/functions';
+import { parseUSD } from '@/utils/functions';
 import { SaveSimpleExpenseDialog } from './components/SaveSimpleExpenseDialog';
 import { SaveIncomeDialog } from './components/SaveIncomeDialog';
 import { SaveInstallmentDialog } from './components/SaveInstallmentDialog';
-import { usePostTransaction } from '../../hooks/mutations/usePostTransaction';
+import { usePostTransaction } from '@/hooks/mutations/usePostTransaction';
 
 export const NewTransactionPage: FC = () => {
   const [simpleExpenseIsVisible, setSimpleExpenseIsVisible] = useState(false);

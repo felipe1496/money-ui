@@ -1,14 +1,14 @@
 import { Suspense, type FC } from 'react';
-import { Button } from '../../components/commons/Button';
-import { ROUTES } from '../../constants/routes';
-import { Page } from '../../components/commons/Page';
+import { Button } from '@/components/commons/Button';
+import { ROUTES } from '@/constants/routes';
+import { Page } from '@/components/commons/Page';
 
-import { PeriodPickerCustom } from '../../components/commons/PeriodPickerCustom';
-import { MONTHS_FULL } from '../../constants/dates';
+import { PeriodPickerCustom } from '@/components/commons/PeriodPickerCustom';
+import { MONTHS_FULL } from '@/constants/dates';
 import { EntriesList } from './components/EntriesList';
-import { usePeriod } from '../../hooks/usePeriod';
-import { Zelda } from '../../components/commons/Zelda';
-import { LoaderWords } from '../../components/commons/loader/LoaderWords';
+import { usePeriod } from '@/hooks/usePeriod';
+import { Zelda } from '@/components/commons/Zelda';
+import { LoaderWords } from '@/components/commons/loader/LoaderWords';
 
 export const WalletPage: FC = () => {
   const { period, setPeriod } = usePeriod();

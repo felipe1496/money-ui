@@ -1,5 +1,5 @@
 import type { FC, HTMLAttributes, ReactNode } from 'react';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   header?: ReactNode;

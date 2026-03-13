@@ -1,8 +1,8 @@
 import { Calendar } from 'lucide-react';
 import { PeriodPickerCustom } from '../PeriodPickerCustom';
-import { cn } from '../../../utils/functions';
+import { cn } from '@/utils/functions';
 import type { FC } from 'react';
-import { MONTHS_FULL } from '../../../constants/dates';
+import { MONTHS_FULL } from '@/constants/dates';
 
 interface PeriodPickerProps {
   value?: { month: number; year: number };

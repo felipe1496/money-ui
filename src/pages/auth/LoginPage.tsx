@@ -1,14 +1,14 @@
 import { useEffect, type FC } from 'react';
-import { Button } from '../../components/commons/Button';
+import { Button } from '@/components/commons/Button';
 import { Link, useNavigate, useSearchParams } from 'react-router';
-import { LINKS } from '../../constants/links';
-import { env } from '../../utils/functions';
-import { useSession } from '../../hooks/useSession';
-import { ROUTES } from '../../constants/routes';
+import { LINKS } from '@/constants/links';
+import { env } from '@/utils/functions';
+import { useSession } from '@/hooks/useSession';
+import { ROUTES } from '@/constants/routes';
 import { toast } from 'sonner';
-import { usePostLoginGoogle } from '../../hooks/mutations/usePostLoginGoogle';
-import { Page } from '../../components/commons/Page';
-import { Card } from '../../components/commons/Card';
+import { usePostLoginGoogle } from '@/hooks/mutations/usePostLoginGoogle';
+import { Page } from '@/components/commons/Page';
+import { Card } from '@/components/commons/Card';
 
 export const LoginPage: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();

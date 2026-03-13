@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
-import { Input } from '../../../components/commons/input/Input';
+import { Input } from '@/components/commons/input/Input';
 import { Dialog } from '@radix-ui/react-dialog';
 import {
   DialogClose,
@@ -9,16 +9,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/commons/Dialog';
-import { Button } from '../../../components/commons/Button';
-import { Textarea } from '../../../components/commons/Textarea';
+} from '@/components/commons/Dialog';
+import { Button } from '@/components/commons/Button';
+import { Textarea } from '@/components/commons/Textarea';
 import dayjs from 'dayjs';
-import type { FCC } from '../../../utils/types';
-import { MoneyInput } from '../../../components/commons/input/MoneyInput';
-import { formatCurrency } from '../../../utils/functions';
-import { Form } from '../../../components/commons/Form';
-import { AsyncSelectCategory } from '../../../components/AsyncSelectCategory';
-import { Spinner } from '../../../components/commons/loader/Spinner';
+import type { FCC } from '@/utils/types';
+import { MoneyInput } from '@/components/commons/input/MoneyInput';
+import { formatCurrency } from '@/utils/functions';
+import { Form } from '@/components/commons/Form';
+import { AsyncSelectCategory } from '@/components/AsyncSelectCategory';
+import { Spinner } from '@/components/commons/loader/Spinner';
 
 interface Props {
   defaultValues?: Form;

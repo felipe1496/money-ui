@@ -1,5 +1,5 @@
-import { SEO } from '../../constants/seo';
-import type { FCC } from '../../utils/types';
+import { SEO } from '@/constants/seo';
+import type { FCC } from '@/utils/types';
 
 interface Props {
   title?: string;

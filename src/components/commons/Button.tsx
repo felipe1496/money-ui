@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, FC } from 'react';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 import { Slot } from '@radix-ui/react-slot';
 
 const variants = {

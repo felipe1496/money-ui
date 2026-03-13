@@ -8,7 +8,7 @@ import {
   CommandLoading,
 } from 'cmdk';
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover';
-import { cn } from '../../../utils/functions';
+import { cn } from '@/utils/functions';
 import { useState, type ReactNode } from 'react';
 
 export interface Option<T> {

@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState, type ComponentProps, type FC } from 'react';
 import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { entriesKeys } from '../../../queries/transactions-queries';
+import { entriesKeys } from '@/queries/transactions-queries';
 import dayjs from 'dayjs';
-import { TransactionsService } from '../../../services/TransactionsService';
-import { useConfirm } from '../../../hooks/useConfirm';
-import { useDeleteTransaction } from '../../../hooks/mutations/useDeleteTransaction';
-import { Card } from '../../../components/commons/Card';
-import { cn, formatCurrency, parseUSD } from '../../../utils/functions';
-import { Button } from '../../../components/commons/Button';
+import { TransactionsService } from '@/services/TransactionsService';
+import { useConfirm } from '@/hooks/useConfirm';
+import { useDeleteTransaction } from '@/hooks/mutations/useDeleteTransaction';
+import { Card } from '@/components/commons/Card';
+import { cn, formatCurrency, parseUSD } from '@/utils/functions';
+import { Button } from '@/components/commons/Button';
 import { SquarePenIcon, TrashIcon } from 'lucide-react';
 import { Link } from 'react-router';
-import { ROUTES } from '../../../constants/routes';
-import { usePeriod } from '../../../hooks/usePeriod';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../../components/commons/Tooltip';
+import { ROUTES } from '@/constants/routes';
+import { usePeriod } from '@/hooks/usePeriod';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/commons/Tooltip';
 import { SaveIncomeDialog } from './SaveIncomeDialog';
 import { SaveSimpleExpenseDialog } from './SaveSimpleExpenseDialog';
-import { createFilter } from '../../../utils/filter';
+import { createFilter } from '@/utils/filter';
 import { SaveInstallmentDialog } from './SaveInstallmentDialog';
-import { usePatchTransaction } from '../../../hooks/mutations/usePatchTransaction';
-import { Spinner } from '../../../components/commons/loader/Spinner';
+import { usePatchTransaction } from '@/hooks/mutations/usePatchTransaction';
+import { Spinner } from '@/components/commons/loader/Spinner';
 export const EntriesList: FC = () => {
   const [isEditingExpense, setIsEditingExpense] = useState<{
     id: string;

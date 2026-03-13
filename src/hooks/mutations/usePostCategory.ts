@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import type { MutationOpts } from '../../utils/types';
-import { CategoriesService } from '../../services/CategoriesService';
+import type { MutationOpts } from '@/utils/types';
+import { CategoriesService } from '@/services/CategoriesService';
 
 export function usePostCategory({
   mutationKey = [],

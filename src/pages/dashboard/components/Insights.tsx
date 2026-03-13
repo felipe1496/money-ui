@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { CategoryPerPeriod } from './CategoryPerPeriodChart';
-import { Card } from '../../../components/commons/Card';
+import { Card } from '@/components/commons/Card';
 import { CategoryBalancePerPeriodList } from './CategoryBalancePerPeriodList';
 
 export const Insights: FC = () => {

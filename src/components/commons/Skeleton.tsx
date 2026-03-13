@@ -1,4 +1,4 @@
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 
 type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'rounded';
 type SkeletonAnimation = 'shimmer' | 'pulse' | 'wave' | 'none';

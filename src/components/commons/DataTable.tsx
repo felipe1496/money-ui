@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
-import { cn } from '../../utils/functions';
+import { cn } from '@/utils/functions';
 
 export interface Column<T> {
   id: string;

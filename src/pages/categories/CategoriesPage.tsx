@@ -1,11 +1,11 @@
 import { Suspense, useState, type FC } from 'react';
-import { Page } from '../../components/commons/Page';
+import { Page } from '@/components/commons/Page';
 import { CategoriesList } from './components/CategoriesList';
-import { Button } from '../../components/commons/Button';
+import { Button } from '@/components/commons/Button';
 import { SaveCategoryDialog } from './components/SaveCategoryDialog';
-import { usePostCategory } from '../../hooks/mutations/usePostCategory';
-import { categoriesKeys } from '../../queries/categories-queries';
-import { LoaderWords } from '../../components/commons/loader/LoaderWords';
+import { usePostCategory } from '@/hooks/mutations/usePostCategory';
+import { categoriesKeys } from '@/queries/categories-queries';
+import { LoaderWords } from '@/components/commons/loader/LoaderWords';
 
 export const CategoriesPage: FC = () => {
   const [addCategoryVisible, setAddCategoryVisible] = useState(false);

@@ -1,6 +1,6 @@
 import type { ChangeEvent, FC, FocusEvent, InputHTMLAttributes } from 'react';
 import { Input } from './Input';
-import { formatCurrency } from '../../../utils/functions';
+import { formatCurrency } from '@/utils/functions';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   minValue?: number;

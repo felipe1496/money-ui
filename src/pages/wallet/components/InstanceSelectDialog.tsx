@@ -5,10 +5,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '../../../components/commons/Dialog';
-import { Radio, RadioItem } from '../../../components/commons/Radio';
-import { INSTANCE } from '../../../constants/ui';
-import { Button } from '../../../components/commons/Button';
+} from '@/components/commons/Dialog';
+import { Radio, RadioItem } from '@/components/commons/Radio';
+import { INSTANCE } from '@/constants/ui';
+import { Button } from '@/components/commons/Button';
 
 interface Props {
   title: ReactNode;

@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getCategoriesPerPeriodQueryOpts } from '../../../queries/categories-queries';
-import { usePeriod } from '../../../hooks/usePeriod';
+import { getCategoriesPerPeriodQueryOpts } from '@/queries/categories-queries';
+import { usePeriod } from '@/hooks/usePeriod';
 import dayjs from 'dayjs';
 
 export const CategoryPerPeriod: FC = () => {

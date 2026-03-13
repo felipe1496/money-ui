@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getCategoriesPerPeriodQueryOpts } from '../../../queries/categories-queries';
-import { usePeriod } from '../../../hooks/usePeriod';
+import { getCategoriesPerPeriodQueryOpts } from '@/queries/categories-queries';
+import { usePeriod } from '@/hooks/usePeriod';
 import dayjs from 'dayjs';
-import { cn } from '../../../utils/functions';
+import { cn } from '@/utils/functions';
 import { useState } from 'react';
 
 const DATA_EXPANDED = {

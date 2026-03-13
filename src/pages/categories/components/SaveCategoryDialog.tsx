@@ -6,18 +6,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/commons/Dialog';
-import { Input } from '../../../components/commons/input/Input';
-import type { FCC } from '../../../utils/types';
+} from '@/components/commons/Dialog';
+import { Input } from '@/components/commons/input/Input';
+import type { FCC } from '@/utils/types';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from '../../../components/commons/Form';
-import { DEFAULT_COLORS } from '../../../constants/default-colors';
-import { cn } from '../../../utils/functions';
+import { Form } from '@/components/commons/Form';
+import { DEFAULT_COLORS } from '@/constants/default-colors';
+import { cn } from '@/utils/functions';
 import { CheckIcon, PlusIcon } from 'lucide-react';
-import { ColorPicker } from '../../../components/commons/ColorPicker';
-import { Button } from '../../../components/commons/Button';
-import { Spinner } from '../../../components/commons/loader/Spinner';
+import { ColorPicker } from '@/components/commons/ColorPicker';
+import { Button } from '@/components/commons/Button';
+import { Spinner } from '@/components/commons/loader/Spinner';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required').max(50, 'Name is too long'),
