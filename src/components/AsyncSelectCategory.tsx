@@ -25,7 +25,8 @@ export const AsyncSelectCategory: FC<Props> = ({
   isCreatable,
 }) => {
   const [search, setSearch] = useState<string>('');
-  const [isCreating, setIsCreating] = useState('');
+  const [creatingName, setCreatingName] = useState<string>('');
+  const [isCreating, setIsCreating] = useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -57,7 +58,8 @@ export const AsyncSelectCategory: FC<Props> = ({
 
       onChange(option);
 
-      setIsCreating('');
+      setCreatingName('');
+      setIsCreating(false);
     },
   });
 
@@ -71,14 +73,24 @@ export const AsyncSelectCategory: FC<Props> = ({
         onSelectedChange={onChange}
         onSearchChange={setSearch}
         placeholder="Select a category..."
-        onCreate={isCreatable ? setIsCreating : undefined}
+        onCreate={
+          isCreatable
+            ? (name) => {
+                setCreatingName(name);
+                setIsCreating(true);
+              }
+            : undefined
+        }
       />
       {isCreatable && isCreating && (
         <SaveCategoryDialog
-          isVisible={!!isCreating}
+          isVisible={isCreating}
           onSave={postCategory}
-          onVisibleChange={() => setIsCreating('')}
-          defaultValues={{ name: isCreating, color: '' }}
+          onVisibleChange={() => {
+            setCreatingName('');
+            setIsCreating(false);
+          }}
+          defaultValues={{ name: creatingName, color: '' }}
           isLoading={isPending}
         />
       )}
