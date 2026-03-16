@@ -34,7 +34,7 @@ const initialDeafultValues: Form = {
 interface Props {
   defaultValues?: Form;
   isLoading?: boolean;
-  onSave: (data: Form) => void;
+  onSave: (data: Form, { reset }: { reset: () => void }) => void;
   isVisible?: boolean;
   onVisibleChange?: (visible: boolean) => void;
 }
@@ -59,8 +59,7 @@ export const SaveCategoryDialog: FCC<Props> = ({
   });
 
   function onSubmit(data: Form) {
-    onSave(data);
-    reset();
+    onSave(data, { reset });
   }
 
   return (
