@@ -11,7 +11,6 @@ export const CategoriesPage: FC = () => {
   const [addCategoryVisible, setAddCategoryVisible] = useState(false);
 
   const { mutate: postCategory, isPending } = usePostCategory({
-    onSuccess: () => setAddCategoryVisible(false),
     meta: {
       successNotification: 'Category created successfully',
       errorNotification: 'There was an error creating the category',
@@ -28,7 +27,20 @@ export const CategoriesPage: FC = () => {
           <SaveCategoryDialog
             isVisible={addCategoryVisible}
             onVisibleChange={setAddCategoryVisible}
-            onSave={postCategory}
+            onSave={(data, { reset }) => {
+              postCategory(
+                {
+                  name: data.name,
+                  color: data.color,
+                },
+                {
+                  onSuccess: () => {
+                    setAddCategoryVisible(false);
+                    reset();
+                  },
+                },
+              );
+            }}
             isLoading={isPending}
           >
             <Button>Add Category</Button>

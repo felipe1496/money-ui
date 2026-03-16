@@ -142,15 +142,22 @@ export const CategoriesList = () => {
             isVisible={!!isEditing}
             onVisibleChange={() => setIsEditing(undefined)}
             defaultValues={isEditing?.defaultValues}
-            onSave={(data) => {
-              patchCategory({
-                id: isEditing?.id as string,
-                payload: {
-                  name: data.name,
-                  color: data.color,
+            onSave={(data, { reset }) => {
+              patchCategory(
+                {
+                  id: isEditing?.id as string,
+                  payload: {
+                    name: data.name,
+                    color: data.color,
+                  },
                 },
-              });
-              setIsEditing(undefined);
+                {
+                  onSuccess: () => {
+                    setIsEditing(undefined);
+                    reset();
+                  },
+                },
+              );
             }}
             isLoading={isPatchCategoryPending}
           />

@@ -26,7 +26,7 @@ export const AsyncSelectCategory: FC<Props> = ({
 }) => {
   const [search, setSearch] = useState<string>('');
   const [creatingName, setCreatingName] = useState<string>('');
-  const [isCreating, setIsCreating] = useState(false);
+  const [addCategoryVisible, setAddCategoryVisible] = useState(false);
 
   const debouncedSearch = useDebounce(search, 500);
 
@@ -48,19 +48,6 @@ export const AsyncSelectCategory: FC<Props> = ({
       errorNotification: 'There was an error creating the category',
       invalidateQuery: [categoriesKeys.all()],
     },
-    onSuccess: (result) => {
-      const category = result.data.category;
-      const option = {
-        id: category.id,
-        value: category,
-        label: category.name,
-      };
-
-      onChange(option);
-
-      setCreatingName('');
-      setIsCreating(false);
-    },
   });
 
   return (
@@ -77,18 +64,39 @@ export const AsyncSelectCategory: FC<Props> = ({
           isCreatable
             ? (name) => {
                 setCreatingName(name);
-                setIsCreating(true);
+                setAddCategoryVisible(true);
               }
             : undefined
         }
       />
-      {isCreatable && isCreating && (
+      {isCreatable && addCategoryVisible && (
         <SaveCategoryDialog
-          isVisible={isCreating}
-          onSave={postCategory}
+          isVisible={addCategoryVisible}
+          onSave={(data, { reset }) => {
+            postCategory(
+              {
+                name: data.name,
+                color: data.color,
+              },
+              {
+                onSuccess: (result) => {
+                  const category = result.data.category;
+                  const option = {
+                    id: category.id,
+                    value: category,
+                    label: category.name,
+                  };
+
+                  onChange(option);
+                  setAddCategoryVisible(false);
+                  reset();
+                },
+              },
+            );
+          }}
           onVisibleChange={() => {
             setCreatingName('');
-            setIsCreating(false);
+            setAddCategoryVisible(false);
           }}
           defaultValues={{ name: creatingName, color: '' }}
           isLoading={isPending}
