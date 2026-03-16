@@ -24,6 +24,38 @@ export const CategoryBalancePerPeriodList = () => {
 
   const showData = data.data.categories.slice(0, perPage);
 
+  const categories = data.data.categories;
+
+  const toggleButton = () => {
+    if (categories.length <= DATA_EXPANDED.SHOW_LESS) {
+      return null;
+    }
+
+    if (perPage === DATA_EXPANDED.SHOW_LESS) {
+      return (
+        <button
+          className="mt-2 cursor-pointer text-sm font-medium text-blue-500 underline"
+          onClick={() => {
+            setPerPage(DATA_EXPANDED.SHOW_ALL);
+          }}
+        >
+          Show more
+        </button>
+      );
+    }
+
+    return (
+      <button
+        className="mt-2 cursor-pointer text-sm font-medium text-blue-500 underline"
+        onClick={() => {
+          setPerPage(DATA_EXPANDED.SHOW_LESS);
+        }}
+      >
+        Show less
+      </button>
+    );
+  };
+
   if (data.data.categories.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center">
@@ -55,25 +87,8 @@ export const CategoryBalancePerPeriodList = () => {
           </div>
         </div>
       ))}
-      {perPage === DATA_EXPANDED.SHOW_LESS ? (
-        <button
-          className="mt-2 cursor-pointer text-sm font-medium text-blue-500 underline"
-          onClick={() => {
-            setPerPage(DATA_EXPANDED.SHOW_ALL);
-          }}
-        >
-          Show more
-        </button>
-      ) : (
-        <button
-          className="mt-2 cursor-pointer text-sm font-medium text-blue-500 underline"
-          onClick={() => {
-            setPerPage(DATA_EXPANDED.SHOW_LESS);
-          }}
-        >
-          Show less
-        </button>
-      )}
+
+      {toggleButton()}
     </div>
   );
 };
