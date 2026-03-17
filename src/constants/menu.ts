@@ -1,4 +1,4 @@
-import { ChartPieIcon, TagsIcon, WalletMinimalIcon } from 'lucide-react';
+import { ChartPieIcon, RepeatIcon, TagsIcon, WalletMinimalIcon } from 'lucide-react';
 import { ROUTES } from './routes';
 
 export const MENU = {
@@ -17,6 +17,11 @@ export const MENU = {
       label: 'Categories',
       route: ROUTES.CATEGORIES.INDEX,
       icon: TagsIcon,
+    },
+    {
+      label: 'Recurrences',
+      route: ROUTES.RECURRENCES.INDEX,
+      icon: RepeatIcon,
     },
   ],
 };

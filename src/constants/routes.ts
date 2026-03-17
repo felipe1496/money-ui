@@ -5,5 +5,6 @@ export const ROUTES = {
   CATEGORIES: {
     INDEX: '/categories',
   },
+  RECURRENCES: { INDEX: '/recurrences' },
   DASHBOARD: '/dashboard',
 };

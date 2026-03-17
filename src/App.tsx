@@ -17,6 +17,7 @@ import { NewTransactionPage } from './pages/wallet/NewTransactionPage';
 import { CategoriesPage } from './pages/categories/CategoriesPage';
 import * as PrimitiveTooltip from '@radix-ui/react-tooltip';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
+import { RecurrencesPage } from './pages/recurrences/RecurrencesPage';
 import { DialogLoader } from './components/DialogLoader';
 
 declare module '@tanstack/react-query' {
@@ -78,6 +79,7 @@ function App() {
             <Route path={ROUTES.WALLET.NEW_TRANSACTION} element={<NewTransactionPage />} />
             <Route path={ROUTES.HOME} element={<WalletPage />} />
             <Route path={ROUTES.CATEGORIES.INDEX} element={<CategoriesPage />} />
+            <Route path={ROUTES.RECURRENCES.INDEX} element={<RecurrencesPage />} />
           </Route>
         </Routes>
         <DialogLoader />
