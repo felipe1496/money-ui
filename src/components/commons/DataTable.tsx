@@ -22,10 +22,7 @@ export const DataTable = <T,>({ columns, data, isLoading = false, getRowProps }:
       return Array.from({ length: 10 }).map((_, rowIndex) => (
         <tr key={`table-row-${rowIndex}`}>
           {columns.map((column) => (
-            <td
-              key={`table-cell-${rowIndex}-${String(column.id)}`}
-              className={cn('border-b border-zinc-800 px-3 py-2')}
-            >
+            <td key={`table-cell-${rowIndex}-${String(column.id)}`} className={cn('px-3 py-1.5')}>
               {column.isLoading || null}
             </td>
           ))}
@@ -36,10 +33,7 @@ export const DataTable = <T,>({ columns, data, isLoading = false, getRowProps }:
     if (data.length === 0) {
       return (
         <tr>
-          <td
-            colSpan={columns.length}
-            className="border-b border-zinc-800 px-3 py-2 text-center text-sm text-zinc-400"
-          >
+          <td colSpan={columns.length} className="px-3 py-1.5 text-center text-sm text-zinc-500">
             No data found
           </td>
         </tr>
@@ -52,10 +46,7 @@ export const DataTable = <T,>({ columns, data, isLoading = false, getRowProps }:
       return (
         <tr key={`table-row-${rowIndex}`} {...rest} className={cn(rowClassName)}>
           {columns.map((column) => (
-            <td
-              key={`table-cell-${rowIndex}-${String(column.id)}`}
-              className={cn('border-b border-zinc-800 px-3 py-2')}
-            >
+            <td key={`table-cell-${rowIndex}-${String(column.id)}`} className={cn('px-3 py-0.5')}>
               {column.render ? column.render(row) : null}
             </td>
           ))}
@@ -67,13 +58,11 @@ export const DataTable = <T,>({ columns, data, isLoading = false, getRowProps }:
     <table className="w-full">
       <thead>
         <tr>
-          {columns.map((column, idx) => (
+          {columns.map((column) => (
             <th
               key={`table-column-${String(column.id)}`}
               className={cn(
-                'bg-zinc-800 px-3 py-2 text-left text-sm font-normal',
-                idx === 0 && 'rounded-tl-md rounded-bl-md',
-                idx === columns.length - 1 && 'rounded-tr-md rounded-br-md',
+                'bg-zinc-100 px-3 py-1.5 text-left text-sm font-semibold',
                 column.trClassName,
               )}
             >

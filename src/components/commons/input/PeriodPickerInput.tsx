@@ -27,7 +27,7 @@ export const PeriodPickerInput: FC<PeriodPickerProps> = ({
     <PeriodPickerCustom value={value} onChange={onChange} minYear={minYear} maxYear={maxYear}>
       <button
         className={cn(
-          'text-foreground h-10 w-full cursor-pointer rounded-md border border-zinc-600 px-3 text-left text-sm transition-colors',
+          'text-foreground h-10 w-full cursor-pointer rounded-md border border-zinc-300 px-3 text-left text-sm transition-colors',
           'flex items-center gap-2',
           !value && 'text-muted-foreground',
           className,

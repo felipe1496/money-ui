@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ComponentProps, type FC } from 'react';
-import { useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { entriesKeys } from '../../../queries/transactions-queries';
 import dayjs from 'dayjs';
 import { TransactionsService } from '../../../services/TransactionsService';
@@ -19,6 +19,8 @@ import { createFilter } from '../../../utils/filter';
 import { SaveInstallmentDialog } from './SaveInstallmentDialog';
 import { usePatchTransaction } from '../../../hooks/mutations/usePatchTransaction';
 import { Spinner } from '../../../components/commons/loader/Spinner';
+import { RecurrencesService } from '../../../services/RecurrencesService';
+
 export const EntriesList: FC = () => {
   const [isEditingExpense, setIsEditingExpense] = useState<{
     id: string;
@@ -39,6 +41,14 @@ export const EntriesList: FC = () => {
   const confirm = useConfirm();
   const queryClient = useQueryClient();
   const periodFormatted = dayjs().year(period.year).month(period.month).format('YYYYMM');
+
+  useSuspenseQuery({
+    queryKey: ['recurrences', 'prepare', periodFormatted],
+    queryFn: async () => {
+      await RecurrencesService.prepareRecurrences(periodFormatted);
+      return true;
+    },
+  });
 
   const {
     mutate: patchTransaction,
@@ -185,7 +195,7 @@ export const EntriesList: FC = () => {
         }
       },
       installment() {
-        if (entry.total_installments > 1) {
+        if (entry.type === 'installment') {
           return (
             <span className="text-sm font-bold">
               ({entry.installment}/{entry.total_installments})

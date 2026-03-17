@@ -14,7 +14,7 @@ import type { FCC } from '../../../utils/types';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MoneyInput } from '../../../components/commons/input/MoneyInput';
-import { NumberInput } from '../../../components/commons/input/NumberInput';
+import { NumericInput } from '../../../components/commons/input/NumericInput';
 import { formatCurrency, parseUSD } from '../../../utils/functions';
 import dayjs from 'dayjs';
 import { AsyncSelectCategory } from '../../../components/AsyncSelectCategory';
@@ -181,7 +181,7 @@ export const SaveInstallmentDialog: FCC<Props> = ({
               </label>
               <label className="flex flex-col text-sm">
                 <span data-error={errors.installments?.message || '*'}>Installments</span>
-                <NumberInput {...register('installments')} />
+                <NumericInput {...register('installments')} />
               </label>
               <label className="flex flex-col text-sm">
                 <span data-error={errors.category?.message}>Category</span>

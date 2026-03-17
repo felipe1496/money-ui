@@ -7,6 +7,8 @@ const variants = {
     'bg-primary hover:bg-primary/90 text-shadow-2xs shadow-[inset_0_-2px_0_rgba(0,0,0,0.3)] text-zinc-50',
   ghost: 'ring-inset hover:ring ring-zinc-300 hover:bg-white',
   outlined: 'border border-zinc-300 hover:bg-zinc-50 shadow-sm bg-white',
+  danger:
+    'bg-red-500 hover:bg-red-600 text-shadow-2xs shadow-[inset_0_-2px_0_rgba(0,0,0,0.3)] text-zinc-50 border-red-500',
 };
 
 const sizes = {
