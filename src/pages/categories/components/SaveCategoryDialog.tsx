@@ -1,4 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
+import { useState } from 'react';
 import {
   Dialog,
   DialogClose,
@@ -15,7 +16,7 @@ import { Form } from '../../../components/commons/Form';
 import { DEFAULT_COLORS } from '../../../constants/default-colors';
 import { cn } from '../../../utils/functions';
 import { CheckIcon, PlusIcon } from 'lucide-react';
-import { ColorPicker } from '../../../components/commons/ColorPicker';
+import { NewColorPicker } from '../../../components/commons/colorpicker/NewColorPicker';
 import { Button } from '../../../components/commons/Button';
 import { Spinner } from '../../../components/commons/loader/Spinner';
 
@@ -58,6 +59,9 @@ export const SaveCategoryDialog: FCC<Props> = ({
     resolver: zodResolver(schema),
   });
 
+  const [ customColor, setCustomColor ] = useState('');
+  const [ selectedColor, setSelectedColor ] = useState('');
+
   function onSubmit(data: Form) {
     onSave(data, { reset });
   }
@@ -79,43 +83,51 @@ export const SaveCategoryDialog: FCC<Props> = ({
             <span data-error={errors.name?.message}>Name</span>
             <Input placeholder="Name" {...register('name')} />
           </label>
-          <label className="flex flex-col text-sm">
+          <label className="flex flex-col text-sm pointer-events-none">
             <span data-error={errors.color?.message}>Color</span>
             <Controller
               name="color"
               control={control}
-              render={({ field: { onChange, value } }) => {
-                const isCustomColor = value && !Object.values(DEFAULT_COLORS).includes(value);
+              render={({ field: { onChange } }) => {
+                const isCustomColor = customColor && !Object.values(DEFAULT_COLORS).includes(customColor);
                 return (
                   <div className="mt-2 flex items-center gap-1">
                     {Object.values(DEFAULT_COLORS).map((color, idx) => (
                       <button
                         key={`${color}-${idx}`}
                         type="button"
-                        onClick={() => onChange(color)}
-                        className="flex size-6 cursor-pointer items-center justify-center rounded-full"
+                        onClick={() => {
+                          onChange(color);
+                          setSelectedColor(color);
+                        }}
+                        className="flex size-6 cursor-pointer items-center justify-center rounded-full pointer-events-auto"
                         style={{ backgroundColor: color }}
                       >
-                        {value === color && <CheckIcon className="size-4 text-white" />}
+                        {selectedColor === color && <CheckIcon className="size-4 text-white" />}
                       </button>
                     ))}
-                    <ColorPicker
-                      onColorChange={onChange}
+                    <NewColorPicker
+                      onColorChange={(newCustomColor) => {
+                        onChange(newCustomColor);
+                        setCustomColor(newCustomColor);
+                        setSelectedColor(newCustomColor);
+                      }}
+                      onClick={() => {setSelectedColor(customColor)}}
                       className={cn(
                         isCustomColor
-                          ? 'flex size-6 cursor-pointer items-center justify-center rounded-full'
-                          : 'border-muted-foreground flex size-5 cursor-pointer items-center justify-center rounded-full border border-dashed',
+                          ? 'flex size-6 cursor-pointer items-center justify-center rounded-full pointer-events-auto'
+                          : 'border-muted-foreground flex size-5 cursor-pointer items-center justify-center rounded-full border border-dashed pointer-events-auto',
                       )}
                       style={{
-                        backgroundColor: isCustomColor ? value : 'transparent',
+                        backgroundColor: isCustomColor ? customColor : 'transparent',
                       }}
                     >
-                      {isCustomColor ? (
+                      {isCustomColor && selectedColor === customColor? (
                         <CheckIcon className="size-4 text-white" />
                       ) : (
                         <PlusIcon className="text-muted-foreground size-3" />
                       )}
-                    </ColorPicker>
+                    </NewColorPicker>
                   </div>
                 );
               }}
