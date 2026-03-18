@@ -123,9 +123,9 @@ export const SaveCategoryDialog: FCC<Props> = ({
                       }}
                     >
                       {isCustomColor && selectedColor === customColor? (
-                        <CheckIcon className="size-4 text-white" />
+                        <CheckIcon className="size-4 text-white pointer-events-none" />
                       ) : (
-                        <PlusIcon className="text-muted-foreground size-3" />
+                        <PlusIcon className="text-muted-foreground size-3 pointer-events-none" />
                       )}
                     </NewColorPicker>
                   </div>

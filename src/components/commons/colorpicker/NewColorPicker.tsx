@@ -1,9 +1,9 @@
 import { ColorPicker } from 'react-aria-components';
 import { ColorArea } from './ColorArea';
 import { ColorSlider } from './ColorSlider';
-import { ColorField } from './ColorField';
 import { Dialog } from './Dialog';
 import { Popover, PopoverTrigger, PopoverContent } from '../Popover';
+import { Input } from '../../../components/commons/input/Input';
 import type { FCC } from '../../../utils/types';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ export const NewColorPicker: FCC<Props> = ({ children, onColorChange, ...props }
     <ColorPicker
       value={color}
       onChange={(newColor) => {
-        setColor(newColor.toString());
+        setColor(newColor.toString('hex'));
         onColorChange?.(newColor.toString('hex'));
       }}
       aria-label={color}
@@ -32,16 +32,19 @@ export const NewColorPicker: FCC<Props> = ({ children, onColorChange, ...props }
             {children}
           </button>
         </PopoverTrigger>
-        <PopoverContent>
-          <Dialog className="flex flex-col gap-2" aria-label="color-picker-dialog">
+        <PopoverContent className="w-fit h-fit p-0">
+          <Dialog className="flex flex-col gap-2 p-2" aria-label="color-picker-dialog">
             <ColorArea
-              className="h-48 w-48"
+              className="aspect-square"
               colorSpace="hsb"
               xChannel="saturation"
               yChannel="brightness"
             />
-            <ColorField aria-label="color-field"/>
             <ColorSlider colorSpace="hsb" channel="hue" />
+            <Input onChange={(newColor) => {
+              setColor(newColor.toString());
+              onColorChange?.(newColor.toString());
+            }} aria-label="color-field" className="h-8"/>
           </Dialog>
         </PopoverContent>
       </Popover>
