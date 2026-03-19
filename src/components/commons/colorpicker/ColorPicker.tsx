@@ -1,9 +1,8 @@
-import { ColorPicker } from 'react-aria-components';
+import { ColorPicker as AriaColorPicker, ColorField, Input, parseColor } from 'react-aria-components';
 import { ColorArea } from './ColorArea';
 import { ColorSlider } from './ColorSlider';
 import { Dialog } from './Dialog';
 import { Popover, PopoverTrigger, PopoverContent } from '../Popover';
-import { Input } from '../../../components/commons/input/Input';
 import type { FCC } from '../../../utils/types';
 import { useState } from 'react';
 
@@ -14,14 +13,14 @@ type Props = {
   onClick?: () => void;
 };
 
-export const NewColorPicker: FCC<Props> = ({ children, onColorChange, ...props }) => {
-  const [color, setColor] = useState('#000000');
+export const ColorPicker: FCC<Props> = ({ children, onColorChange, ...props }) => {
+  const [color, setColor] = useState(parseColor('#000000'));
 
   return (
-    <ColorPicker
+    <AriaColorPicker
       value={color}
       onChange={(newColor) => {
-        setColor(newColor.toString('hex'));
+        setColor(newColor);
         onColorChange?.(newColor.toString('hex'));
       }}
       aria-label={color}
@@ -32,8 +31,8 @@ export const NewColorPicker: FCC<Props> = ({ children, onColorChange, ...props }
             {children}
           </button>
         </PopoverTrigger>
-        <PopoverContent className="w-fit h-fit p-0">
-          <Dialog className="flex flex-col gap-2 p-2" aria-label="color-picker-dialog">
+        <PopoverContent className="h-fit w-fit p-0" side="top">
+          <Dialog className="flex flex-col gap-6 p-4" aria-label="color-picker-dialog">
             <ColorArea
               className="aspect-square"
               colorSpace="hsb"
@@ -41,13 +40,19 @@ export const NewColorPicker: FCC<Props> = ({ children, onColorChange, ...props }
               yChannel="brightness"
             />
             <ColorSlider colorSpace="hsb" channel="hue" />
-            <Input onChange={(newColor) => {
-              setColor(newColor.toString());
-              onColorChange?.(newColor.toString());
-            }} aria-label="color-field" className="h-8"/>
+            <ColorField aria-label="color-field">
+              <Input
+                className="placeholder:text-muted-foreground h-8 rounded-md border border-zinc-300 px-2 text-sm"
+                onKeyDown={(evt) => {
+                  if (evt.key === 'Enter') {
+                    evt.currentTarget.blur();
+                  }
+                }}
+              />
+            </ColorField>
           </Dialog>
         </PopoverContent>
       </Popover>
-    </ColorPicker>
+    </AriaColorPicker>
   );
 };
